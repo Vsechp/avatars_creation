@@ -1,30 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Create avatar</title>
+    <title>Generate avatar</title>
     <style>
-        body { font-family: Arial; max-width: 600px; margin: 20px auto; }
+        body { font-family: Arial; max-width: 600px; margin: 20px auto; padding: 20px; }
         input, select { width: 100%; padding: 8px; margin: 5px 0; }
         button { background: #007bff; color: white; border: none; padding: 10px; cursor: pointer; }
-        #result { margin-top: 20px; }
+        #result { margin-top: 20px; text-align: center; }
+        .error { color: red; }
     </style>
 </head>
 <body>
-    <h2>Create avatar</h2>
+    <h2>Generate avatar</h2>
     <select id="gender">
-        <option value="man">Мужчина</option>
-        <option value="woman">Женщина</option>
+        <option value="man">Male</option>
+        <option value="woman">Female</option>
     </select>
     <select id="ethnicity">
-        <option value="asian">Азиат</option>
-        <option value="caucasian">Европеец</option>
-        <option value="african">Африканец</option>
+        <option value="asian">Asian</option>
+        <option value="caucasian">European</option>
+        <option value="african">African</option>
     </select>
-    <input id="age" placeholder="Возраст (young, middle-aged, old)">
-    <input id="expression" placeholder="Выражение (smiling, serious)">
-    <input id="details" placeholder="Детали (glasses, beard)">
-    <input id="profession" placeholder="Профессия (teacher, accountant)">
-    <button onclick="generateAvatar()">Создать</button>
+    <input id="age" placeholder="Age (example: young, middle-aged, old)">
+    <input id="expression" placeholder="Выражение (например: smiling, serious)">
+    <input id="details" placeholder="Details (example: glasses, beard)">
+    <input id="profession" placeholder="Profession  (example: teacher, accountant, manager)">
+    <button onclick="generateAvatar()">Generate</button>
     <div id="result"></div>
 
     <script>
@@ -36,18 +37,26 @@
             const details = document.getElementById("details").value;
             const profession = document.getElementById("profession").value;
 
-            const response = await fetch("https://script.google.com/macros/s/AKfycbxTcpB_SO7Gif71cQ8jE3kp77kcXbix-5km5U3ySjgf/dev", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ gender, ethnicity, age, expression, details, profession })
-            });
+            try {
+                const response = await fetch("https://script.google.com/macros/s/AKfycby1jCTUofVpB7K4IQdB03hDtSle869cXKSPylzc62-CK6NoTsXFWDn2BasO61EdCUisSw/exec", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ gender, ethnicity, age, expression, details, profession })
+                });
 
-            const data = await response.json();
-            const img = document.createElement("img");
-            img.src = data.url;
-            img.style.width = "300px";
-            document.getElementById("result").innerHTML = "";
-            document.getElementById("result").appendChild(img);
+                const data = await response.json();
+                if (data.error) throw new Error(data.error);
+
+                const img = document.createElement("img");
+                img.src = data.url;
+                img.style.width = "300px";
+                document.getElementById("result").innerHTML = "";
+                document.getElementById("result").appendChild(img);
+
+            } catch (error) {
+                document.getElementById("result").innerHTML = 
+                    `<div class="error">Ошибка: ${error.message}</div>`;
+            }
         }
     </script>
 </body>
