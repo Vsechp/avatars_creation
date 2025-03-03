@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Генератор аватарок</title>
+    <title>Create avatar</title>
     <style>
         body { font-family: Arial; max-width: 600px; margin: 20px auto; }
         input, select { width: 100%; padding: 8px; margin: 5px 0; }
@@ -10,29 +10,36 @@
     </style>
 </head>
 <body>
-    <h2>Создать аватарку</h2>
+    <h2>Create avatar</h2>
     <select id="gender">
         <option value="man">Мужчина</option>
         <option value="woman">Женщина</option>
     </select>
-    <input id="age" placeholder="Возраст (напр.: young, middle-aged, old)">
-    <input id="expression" placeholder="Выражение (напр.: smiling, serious)">
-    <input id="details" placeholder="Детали (напр.: glasses, beard)">
+    <select id="ethnicity">
+        <option value="asian">Азиат</option>
+        <option value="caucasian">Европеец</option>
+        <option value="african">Африканец</option>
+    </select>
+    <input id="age" placeholder="Возраст (young, middle-aged, old)">
+    <input id="expression" placeholder="Выражение (smiling, serious)">
+    <input id="details" placeholder="Детали (glasses, beard)">
+    <input id="profession" placeholder="Профессия (teacher, accountant)">
     <button onclick="generateAvatar()">Создать</button>
     <div id="result"></div>
 
     <script>
         async function generateAvatar() {
             const gender = document.getElementById("gender").value;
+            const ethnicity = document.getElementById("ethnicity").value;
             const age = document.getElementById("age").value;
             const expression = document.getElementById("expression").value;
             const details = document.getElementById("details").value;
+            const profession = document.getElementById("profession").value;
 
-            // Отправка данных на бэкенд
-            const response = await fetch("ВАШ_БЭКЕНД_URL", {
+            const response = await fetch("https://script.google.com/macros/s/AKfycbxTcpB_SO7Gif71cQ8jE3kp77kcXbix-5km5U3ySjgf/dev", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ gender, age, expression, details })
+                body: JSON.stringify({ gender, ethnicity, age, expression, details, profession })
             });
 
             const data = await response.json();
