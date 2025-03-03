@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Генератор аватарок</title>
+    <style>
+        body { font-family: Arial; max-width: 600px; margin: 20px auto; }
+        input, select { width: 100%; padding: 8px; margin: 5px 0; }
+        button { background: #007bff; color: white; border: none; padding: 10px; cursor: pointer; }
+        #result { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h2>Создать аватарку</h2>
+    <select id="gender">
+        <option value="man">Мужчина</option>
+        <option value="woman">Женщина</option>
+    </select>
+    <input id="age" placeholder="Возраст (напр.: young, middle-aged, old)">
+    <input id="expression" placeholder="Выражение (напр.: smiling, serious)">
+    <input id="details" placeholder="Детали (напр.: glasses, beard)">
+    <button onclick="generateAvatar()">Создать</button>
+    <div id="result"></div>
+
+    <script>
+        async function generateAvatar() {
+            const gender = document.getElementById("gender").value;
+            const age = document.getElementById("age").value;
+            const expression = document.getElementById("expression").value;
+            const details = document.getElementById("details").value;
+
+            // Отправка данных на бэкенд
+            const response = await fetch("ВАШ_БЭКЕНД_URL", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ gender, age, expression, details })
+            });
+
+            const data = await response.json();
+            const img = document.createElement("img");
+            img.src = data.url;
+            img.style.width = "300px";
+            document.getElementById("result").innerHTML = "";
+            document.getElementById("result").appendChild(img);
+        }
+    </script>
+</body>
+</html>
